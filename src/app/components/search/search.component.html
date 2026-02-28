@@ -44,14 +44,14 @@
   }
 
   <!-- Error State -->
-  @if (errorMessage) {
+  @if (errorMessage && !loading) {
     <div class="state-message error">
       <p>{{ errorMessage }}</p>
     </div>
   }
 
-  <!-- Results -->
-  @if (!loading && !errorMessage) {
+  <!-- Results (always subscribed to avoid resubscription loops) -->
+  <div [hidden]="loading || errorMessage">
     @if ((meals$ | async); as meals) {
       @if (meals.length > 0) {
         <div class="results-grid">
@@ -69,5 +69,5 @@
         </div>
       }
     }
-  }
+  </div>
 </section>
