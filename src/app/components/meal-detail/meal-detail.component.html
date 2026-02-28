@@ -1,0 +1,97 @@
+<!-- Loading State -->
+@if (loading) {
+  <div class="state-message">
+    <div class="spinner"></div>
+    <p>Loading recipe...</p>
+  </div>
+}
+
+@if (!loading) {
+  @if (meal$ | async; as meal) {
+    <article class="detail-page">
+      <!-- Back Navigation -->
+      <a routerLink="/" class="back-link">&larr; Back to search</a>
+
+      <!-- Header -->
+      <header class="detail-header">
+        <img [src]="meal.strMealThumb" [alt]="meal.strMeal" class="hero-image" />
+        <div class="header-info">
+          <h1>{{ meal.strMeal }}</h1>
+          <div class="meta-badges">
+            <span class="badge category">{{ meal.strCategory }}</span>
+            <span class="badge area">{{ meal.strArea }}</span>
+            @if (meal.strTags) {
+              @for (tag of meal.strTags.split(','); track tag) {
+                @if (tag.trim()) {
+                  <span class="badge tag">{{ tag.trim() }}</span>
+                }
+              }
+            }
+          </div>
+        </div>
+      </header>
+
+      <div class="detail-grid">
+        <!-- Ingredients -->
+        <section class="ingredients-section">
+          <h2>Ingredients</h2>
+          <ul class="ingredients-list">
+            @for (ing of meal.ingredients; track ing.name) {
+              <li>
+                <img
+                  [src]="'https://www.themealdb.com/images/ingredients/' + ing.name + '-Small.png'"
+                  [alt]="ing.name"
+                  class="ingredient-thumb"
+                  loading="lazy"
+                />
+                <div>
+                  <strong>{{ ing.name }}</strong>
+                  @if (ing.measure) {
+                    <span class="measure">{{ ing.measure }}</span>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
+        </section>
+
+        <!-- Instructions -->
+        <section class="instructions-section">
+          <h2>Instructions</h2>
+          @for (step of meal.strInstructions.split('\n'); track $index) {
+            @if (step.trim()) {
+              <p>{{ step.trim() }}</p>
+            }
+          }
+        </section>
+      </div>
+
+      <!-- Video -->
+      @if (meal.strYoutube) {
+        <section class="video-section">
+          <h2>Video Tutorial</h2>
+          <div class="video-wrapper">
+            <iframe
+              [src]="getYoutubeEmbedUrl(meal.strYoutube)"
+              title="Recipe video"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </section>
+      }
+
+      <!-- Source Link -->
+      @if (meal.strSource) {
+        <a [href]="meal.strSource" target="_blank" rel="noopener" class="source-link">
+          View original source &rarr;
+        </a>
+      }
+    </article>
+  } @else {
+    <div class="state-message error">
+      <p>Recipe not found.</p>
+      <a routerLink="/" class="back-link">&larr; Back to search</a>
+    </div>
+  }
+}

@@ -1,0 +1,73 @@
+<section class="search-page">
+  <!-- Hero / Header -->
+  <div class="hero">
+    <h1>Recipe Explorer</h1>
+    <p class="subtitle">Discover delicious meals from around the world</p>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="controls">
+    <div class="search-box">
+      <span class="search-icon">&#128269;</span>
+      <input
+        type="text"
+        placeholder="Search recipes by name..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+        aria-label="Search recipes"
+      />
+      @if (searchTerm) {
+        <button class="clear-btn" (click)="clearFilters()" aria-label="Clear search">&times;</button>
+      }
+    </div>
+
+    <div class="category-filter">
+      <select
+        [(ngModel)]="selectedCategory"
+        (ngModelChange)="onCategoryChange($event)"
+        aria-label="Filter by category"
+      >
+        <option value="">All Categories</option>
+        @for (cat of categories$ | async; track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  @if (loading) {
+    <div class="state-message">
+      <div class="spinner"></div>
+      <p>Searching recipes...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (errorMessage) {
+    <div class="state-message error">
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
+
+  <!-- Results -->
+  @if (!loading && !errorMessage) {
+    @if ((meals$ | async); as meals) {
+      @if (meals.length > 0) {
+        <div class="results-grid">
+          @for (meal of meals; track meal.idMeal) {
+            <app-meal-card [meal]="meal"></app-meal-card>
+          }
+        </div>
+      } @else if (searchTerm || selectedCategory) {
+        <div class="state-message empty">
+          <p>No recipes found. Try a different search or category.</p>
+        </div>
+      } @else {
+        <div class="state-message welcome">
+          <p>Start typing or pick a category to explore recipes!</p>
+        </div>
+      }
+    }
+  }
+</section>

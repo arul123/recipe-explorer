@@ -1,0 +1,18 @@
+<a class="card" [routerLink]="['/meal', meal.idMeal]">
+  <div class="card-image">
+    <img [src]="meal.strMealThumb + '/preview'" [alt]="meal.strMeal" loading="lazy" />
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">{{ meal.strMeal }}</h3>
+    @if (meal.strCategory || meal.strArea) {
+      <p class="card-meta">
+        @if (meal.strCategory) {
+          <span class="badge">{{ meal.strCategory }}</span>
+        }
+        @if (meal.strArea) {
+          <span class="badge area">{{ meal.strArea }}</span>
+        }
+      </p>
+    }
+  </div>
+</a>
