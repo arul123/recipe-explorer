@@ -6,7 +6,8 @@
   </div>
 }
 
-@if (!loading) {
+<!-- Always subscribed to avoid resubscription loops -->
+<div [hidden]="loading">
   @if (meal$ | async; as meal) {
     <article class="detail-page">
       <!-- Back Navigation -->
@@ -94,4 +95,4 @@
       <a routerLink="/" class="back-link">&larr; Back to search</a>
     </div>
   }
-}
+</div>
