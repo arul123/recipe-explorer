@@ -34,7 +34,7 @@ Built with **Angular 19**, standalone components, RxJS-driven state, and lazy-lo
 
 ```bash
 # Clone the repo
-git clone <your-repo-url>
+git clone https://github.com/arul123/recipe-explorer.git
 cd recipe-explorer
 
 # Install dependencies
